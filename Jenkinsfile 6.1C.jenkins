@@ -1,5 +1,7 @@
 pipeline {
+
     agent any
+
 
     stages {
         stage('Build') {
@@ -23,18 +25,9 @@ pipeline {
             }
             post {
                 success {
-                    mail(
-                        to: "jomedelte@gmail.com",
-                        subject: "Security Scan Success",
-                        body: "The security scan was successful."
-                    )
-                }
-                failure {
-                    mail(
-                        to: "jomedelte@gmail.com",
-                        subject: "Security Scan Failure",
-                        body: "The security scan failed."
-                    )
+                    mail to: "jomedelte@gmail.com",
+                         subject: "Security scan email",
+                         body: "Scan was successful"
                 }
             }
         }
@@ -49,49 +42,22 @@ pipeline {
             }
             post {
                 success {
-                    mail(
-                        to: "jomedelte@gmail.com",
-                        subject: "Integration Tests Success",
-                        body: "Integration tests on staging were successful."
-                    )
-                }
-                failure {
-                    mail(
-                        to: "jomedelte@gmail.com",
-                        subject: "Integration Tests Failure",
-                        body: "Integration tests on staging failed."
-                    )
+                    mail to: "jomedelte@gmail.com",
+                         subject: "Test success email",
+                         body: "Integration test was successful"
                 }
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo "Deploy application to production server AWS EC2"
+                echo "Deploy application to production server  AWS EC2"
             }
             post {
                 success {
-                    script {
-                        // Save console log to a file
-                        def logFile = "${env.WORKSPACE}/console.log"
-                        writeFile file: logFile, text: currentBuild.rawBuild.getLog(1000).join("\n")
-                    }
-
-                    // Send email with log file as attachment
-                    mail(
-                        to: "jomedelte@gmail.com",
-                        subject: "Production Deploy Success - Build #${env.BUILD_NUMBER}",
-                        body: "The production deployment was successful. Please find the build logs attached.",
-                        attachLog: true,
-                        attachmentsPattern: 'console.log'
-                    )
-                }
-                failure {
-                    mail(
-                        to: "jomedelte@gmail.com",
-                        subject: "Production Deploy Failure - Build #${env.BUILD_NUMBER}",
-                        body: "The production deployment failed. Please review the logs.",
-                        attachLog: true
-                    )
+                    mail to: "jomedelte@gmail.com",
+                         subject: "Deploy status email",
+                         body: "Build was successful"
+                         
                 }
             }
         }
