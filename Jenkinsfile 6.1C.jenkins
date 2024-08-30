@@ -40,9 +40,12 @@ pipeline {
             }
             post {
                 success {
-                    mail to: "jomedelte@gmail.com",
-                         subject: "Deploy status email",
-                         body: "Build was successful"
+                    script{
+                        def log = currentBuild.rawBuild.getLog(100).join('\n')
+                        mail to: "jomedelte@gmail.com",
+                             subject: "Deploy status email",
+                             body: "Build was successful. \n\nLog:\n${log}"
+                    }
                 }
             }
         }
