@@ -29,6 +29,12 @@ pipeline {
                          subject: "Security scan email",
                          body: "Scan was successful"
                 }
+                failure {
+                    mail to: "jomedelte@gmail.com",
+                         subject: "Security scan email",
+                         body: "Security scan failed"
+                }
+                
             }
         }
         stage('Deploy to Staging') {
@@ -46,6 +52,12 @@ pipeline {
                          subject: "Test success email",
                          body: "Integration test was successful"
                 }
+                failure {
+                    mail to: "jomedelte@gmail.com",
+                         subject: "Test fail email",
+                         body: "Integration test failed"
+                }
+                
             }
         }
         stage('Deploy to Production') {
@@ -56,8 +68,12 @@ pipeline {
                 success {
                     mail to: "jomedelte@gmail.com",
                          subject: "Deploy status email",
-                         body: "Build was successful"
-                         
+                         body: "Build was successful"     
+                }
+                failure {
+                    mail to: "jomedelte@gmail.com",
+                         subject: "Deploy status email",
+                         body: "Build failed"     
                 }
             }
         }
