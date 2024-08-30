@@ -54,15 +54,11 @@ pipeline {
             }
             post {
                 success {
-                    script {
-                        // Send email with the log as an attachment
-                        def log = currentBuild.rawBuild.getLog(100).join('\n')
-                        mail to: 'jomedelte@gmail.com',
-                            subject: "Pipeline Success: ${currentBuild.fullDisplayName}",
-                            body: "Pipeline success. Check Jenkins for more details.\n\nLog:\n${log}"
+                    mail to: "jomedelte@gmail.com",
+                         subject: "Deploy status email",
+                         body: "Build was successful"
                 }
             }
         }
     }
-}
 }
