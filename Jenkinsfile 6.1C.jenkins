@@ -54,9 +54,19 @@ pipeline {
             }
             post {
                 success {
-                    mail to: "jomedelte@gmail.com",
-                         subject: "Deploy status email",
-                         body: "Build was successful"
+                    script {
+                        def logFile = "${env.WORKSPACE}/console.log"
+                        writeFile file: logFile, text: currentBuild.rawBuild.getLog(1000).join("\n")
+            }
+
+            // Send email with log file as attachment
+            emailext (
+                to: "jomedelte@gmail.com",
+                subject: "Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                body: "Please find the build logs attached.\n\nStatus: ${currentBuild.currentResult}",
+                attachLog: true, // Attach build log
+                attachmentsPattern: 'console.log'
+            )
                 }
             }
         }
